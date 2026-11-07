@@ -207,7 +207,7 @@
     if (app.ui.thinking[p.id]) h += '<div class="dec thinking"><span class="spin"></span> Thinking…</div>';
     else if (ld) {
       var d = ld.d;
-      var actTxt = d.status === 'ok' ? '<b class="act ' + d.effective + '">' + ico(d.effective) + ' ' + d.effective.toUpperCase() + (d.effective !== 'hold' ? ' ' + Math.round(d.size * 100) + '%' : '') + '</b>' : '<b class="act hold">■ HOLD</b>';
+      var actTxt = d.status === 'ok' ? '<b class="act ' + d.effective + '">' + ico(d.effective) + ' ' + d.effective.toUpperCase() + (d.effective !== 'hold' ? ' · size ' + Math.round(d.size * 100) + '%' : '') + '</b>' : '<b class="act hold">■ HOLD</b>';
       h += '<div class="dec"><div class="dechead"><span>Turn ' + ld.turn + '</span>' + actTxt + (d.latencyMs ? '<small>' + d.latencyMs + ' ms</small>' : '') + '</div>';
       if (d.status === 'ok') {
         var pr = probsOf(d);
