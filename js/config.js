@@ -6,7 +6,7 @@
   DP.config = {
     VERSION: '1.0.0',
     // Public App Key (pk_...) created at enter.pollinations.ai/keys -> Apps. Safe to commit.
-    APP_KEY: 'pk_REPLACE_ME',
+    APP_KEY: 'pk_BItEdjpCCzNJ0UhA',
     // Public repository, shown in the Connect menu and README.
     REPO_URL: 'https://github.com/patbing/decision-pit',
 
