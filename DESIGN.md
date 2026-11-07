@@ -76,7 +76,7 @@ Pollinations 커뮤니티 퀘스트 #19176 "A game that AI models play" 제출�
 | `openai/gpt-6-luna-decisions` | GPT-6 Luna Decisions | true | 0.10 (272K 이하) | 1,050,000 | Text state only |
 
 - 결정 모델은 모두 출력 토큰 단가가 0입니다(입력에만 과금). "1 Pollen ≈ $1"입니다(README).
-- **모델 목록은 하드코딩하지 않습니다.** `GET https://gen.pollinations.ai/v1/models?category=decision`은 인증 없이 호출할 수 있는 공개 엔드포인트입니다(확인됨). 응답의 `data[]` 항목에는 `id, title, description, supported_endpoints, paid_only, pricing{currency:"pollen", promptTextTokens:"0.000000042" …(0인 필드는 생략)}, per_user_rpm, context_length, health`이 들어 있습니다. **BYOP 키로 인증해서 호출하면 키 권한으로 거르고, Paid 잔액이 없거나 Quest Pollen만 쓰는 키에서는 paid_only 모델을 숨깁니다**(확인됨: APIDOCS). 따라서 연결 뒤 인증 목록이 곧 "이 사용자가 실제로 쓸 수 있는 플레이어 목록"입니다.
+- **모델 목록은 하드코딩하지 않습니다.** `GET https://gen.pollinations.ai/v1/models`는 인증 없이 호출할 수 있는 공개 엔드포인트입니다. 이 엔드포인트에는 `category` 쿼리 파라미터가 없어서(`gen.pollinations.ai/src/schemas/models.ts`의 `ModelListQueryParamsSchema`), `?category=decision`을 붙여도 무시되고 전체 목록이 옵니다. 그래서 `supported_endpoints`에 `/alpha/decisions`가 있는 항목만 클라이언트에서 고릅니다. 응답의 `data[]` 항목에는 `id, title, description, supported_endpoints, paid_only, pricing{currency:"pollen", promptTextTokens:"0.000000042" …(0인 필드는 생략)}, per_user_rpm, context_length, health`이 들어 있습니다. **BYOP 키로 인증해서 호출하면 키 권한으로 거르고, Paid 잔액이 없거나 Quest Pollen만 쓰는 키에서는 paid_only 모델을 숨깁니다**(확인됨: APIDOCS). 따라서 연결 뒤 인증 목록이 곧 "이 사용자가 실제로 쓸 수 있는 플레이어 목록"입니다.
 
 ### 1.5 BYOP와 `<polli-connect>` (확인됨: BRING_YOUR_OWN_POLLEN.md, `packages/ui/src/browser/connect*.ts(x)`, `packages/sdk/src/react/PolliProvider.tsx`, npm 레지스트리)
 - 드롭인 스크립트: `https://cdn.jsdelivr.net/npm/@pollinations/ui@<버전>/dist/connect.js`. 문서 예시는 `0.1.0-alpha.20`이고, npm 최신 alpha는 `0.1.0-alpha.31`(2026-11-02)입니다. 두 버전 모두 tarball 안에 `dist/connect.js`와 `dist/styles.css`가 있음을 확인했습니다. React가 포함된 약 380KB 번들입니다.
@@ -435,7 +435,7 @@ fetch 옵션: `method:'POST'`, `credentials:'omit'`, `cache:'no-store'`, `signal
 
 ### 6.2 Setup 뷰
 1. **Mode** 라디오: Live (your Pollen) / Offline simulation (0 Pollen) / Watch a recorded match(§8.3 파일이 있을 때만).
-2. **Players**: 결정 모델 체크리스트. `/v1/models?category=decision`에서 가져오고, 연결된 상태면 인증해서 다시 가져옵니다.
+2. **Players**: 결정 모델 체크리스트. `/v1/models`에서 가져와 `supported_endpoints`로 거르고, 연결된 상태면 인증해서 다시 가져옵니다.
    - 행마다 표시 이름(title), `id`, 배지(`Free` = 단가 필드 없음 / `Quest Pollen OK` = paid_only false / `Paid Pollen` = paid_only true), 30턴 예상 비용, `per_user_rpm`, health.status를 보여줍니다.
    - 기본 체크: 연결 전에는 비활성("Connect to play live"), 연결 뒤에는 접근 가능한 모델 전부(최대 6). `respan/span-01-lite`는 기본으로 체크 해제하고 "noul-only — not compatible"로 표시합니다. 판정 기준은 `description`에 "only noul"이 들어 있는지입니다. 체크인에서도 다시 걸러집니다.
    - 목록을 가져오지 못하면 "Model list unavailable — Retry" 버튼만 보여줍니다. Live 모드를 비활성화하고 오프라인은 그대로 둡니다. **정적 모델 목록 폴백은 두지 않습니다.**
@@ -597,7 +597,7 @@ decision-pit/
 <script src="js/main.js"></script>
 ```
 `index.html` 푸터에 다음 문구를 **보이는 텍스트로** 넣습니다.
-"Uses Pollinations: POST https://gen.pollinations.ai/alpha/decisions (decision models) · GET https://gen.pollinations.ai/v1/models?category=decision (model list) · Sign-in via Pollinations Connect (BYOP)." 그 옆에 배지 HTML(양식에 있는 원문)을 둡니다.
+"Uses Pollinations: POST https://gen.pollinations.ai/alpha/decisions (decision models) · GET https://gen.pollinations.ai/v1/models (model list) · Sign-in via Pollinations Connect (BYOP)." 그 옆에 배지 HTML(양식에 있는 원문)을 둡니다.
 
 ### 9.1 구현 우선순위
 - **P0(제출 필수)**: config, pollinations, rng, market, portfolio, prompt, decide, sim-players, engine, chart, ui, main, 개입 3종, 응원, 순위와 수상, 인스펙터, 비용 표시, 오프라인, BYOP, README, 스크린샷, 테스트
@@ -626,7 +626,7 @@ decision-pit/
   2. How to play(3단계)
   3. Modes(Live / Offline / Replay)
   4. **Pollinations endpoints used**(정확한 URL 2개와 요청 예시 1개)
-  5. Players: decision models discovered from `/v1/models?category=decision` at runtime(하드코딩 아님), Free/Quest/Paid 구분
+  5. Players: decision models discovered from `/v1/models` at runtime(하드코딩 아님), Free/Quest/Paid 구분
   6. Cost(호출 수 공식과 추정치, 실제 usage 표시)
   7. BYOP & privacy(sessionStorage, 키를 저장하지 않음, D3 로깅 고지)
   8. Scoring rules(사이징 공식, Brier, 서바이벌)
@@ -691,7 +691,7 @@ decision-pit/
 
 ## 14. 미확인 항목 목록
 
-1. **`gen.pollinations.ai` 실시간 응답 전부**: `/v1/models?category=decision`의 현재 목록, health, 가용성과 `/alpha/decisions` 실제 호출은 이 환경에서 접속할 수 없었습니다. 레지스트리 소스(2026-11-07 main)로만 확인했습니다.
+1. **`gen.pollinations.ai` 실시간 응답 전부**: `/v1/models`의 현재 목록, health, 가용성과 `/alpha/decisions` 실제 호출은 이 환경에서 접속할 수 없었습니다. 레지스트리 소스(2026-11-07 main)로만 확인했습니다.
 2. Microsoft-Decision-1, Kev 4B, Decider, d1, Jev가 **한 요청에 질문 2개**와 3옵션 choice를 받는지(D3는 2~255개, 64문항까지 소스로 확인)
 3. 질문이 여러 개일 때 입력 토큰을 문항마다 다시 세는지, 그리고 최소 과금 단위가 있는지
 4. 결정 모델별 응답 지연시간

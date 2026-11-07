@@ -1,7 +1,7 @@
 /* All network access lives here.
  * Endpoints used:
  *   POST https://gen.pollinations.ai/alpha/decisions   (decision models)
- *   GET  https://gen.pollinations.ai/v1/models?category=decision   (model list)
+ *   GET  https://gen.pollinations.ai/v1/models   (model list)
  * The user's sk_ key is only ever passed in as an argument and never logged or stored.
  */
 (function () {
@@ -11,11 +11,12 @@
 
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
 
-  // GET /v1/models?category=decision (public; with a key it is filtered to what that key may use)
+  // GET /v1/models (public; with a key it is filtered to what that key may use).
+  // The endpoint has no category filter, so decision models are picked by supported_endpoints below.
   function listDecisionModels(key) {
     var headers = {};
     if (key) headers['Authorization'] = 'Bearer ' + key;
-    return fetch(C.ENDPOINT_MODELS + '?category=decision', {
+    return fetch(C.ENDPOINT_MODELS, {
       method: 'GET', headers: headers, credentials: 'omit', cache: 'no-store'
     }).then(function (res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);

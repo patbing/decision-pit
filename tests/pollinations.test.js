@@ -137,7 +137,7 @@ test('model list: filters to the decision endpoint and flags noul-only models', 
   assert.equal(ms.length, 2);
   assert.equal(ms[0].rpm, 30);
   assert.equal(ms[1].noulOnly, true);
-  assert.ok(fetch.calls[0].url.endsWith('/v1/models?category=decision'));
+  assert.ok(fetch.calls[0].url.endsWith('/v1/models'));
   assert.equal(fetch.calls[0].init.headers.Authorization, undefined);
 });
 

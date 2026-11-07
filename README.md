@@ -20,7 +20,7 @@ Live page: https://patbing.github.io/decision-pit/
 
 ## Pollinations endpoints used
 - `POST https://gen.pollinations.ai/alpha/decisions` (typed decisions)
-- `GET https://gen.pollinations.ai/v1/models?category=decision` (model list, filtered by your key when signed in)
+- `GET https://gen.pollinations.ai/v1/models` (model list, filtered by your key when signed in)
 
 ```json
 {
@@ -38,7 +38,7 @@ Live page: https://patbing.github.io/decision-pit/
 Option order is shuffled per player to reduce position bias. All network code is in `js/pollinations.js`. The in-app Inspector shows every real request and response and can copy a request as `curl` (the key is replaced by `$POLLINATIONS_KEY`).
 
 ## Players
-Decision models come from `/v1/models?category=decision` at runtime (nothing is hard-coded). Badges: **Free** (no price fields), **Quest Pollen OK** (not paid-only), **Paid Pollen** (paid-only). Models that only return "noul" answers are shown but not selectable. If a model rejects the two-question request with HTTP 400/422, it falls back to one question (no forecast score).
+Decision models come from `/v1/models` at runtime (nothing is hard-coded): every model that lists `/alpha/decisions` in `supported_endpoints`. Badges: **Free** (no price fields), **Quest Pollen OK** (not paid-only), **Paid Pollen** (paid-only). Models that only return "noul" answers are shown but not selectable. If a model rejects the two-question request with HTTP 400/422, it falls back to one question (no forecast score).
 
 ## Cost
 Each live player makes 1 call per turn plus 1 check-in call. Spent Pollen is computed from the `usage` block of each response and the model's published price. A cost cap (default 0.05 Pollen) pauses the match when crossed; you choose whether to continue. Failed or retried calls may still cost.

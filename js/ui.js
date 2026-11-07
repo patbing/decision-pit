@@ -60,7 +60,7 @@
 
     // players
     h += '<div class="panel"><h2>2 · Players <small>(max ' + C.MAX_AI_PLAYERS + ')</small></h2>';
-    h += '<h3 class="sub">Decision models <small>from GET /v1/models?category=decision</small></h3>';
+    h += '<h3 class="sub">Decision models <small>from GET /v1/models</small></h3>';
     if (app.modelsStatus === 'loading') h += '<p class="hint">Loading model list…</p>';
     else if (app.modelsStatus === 'error') h += '<p class="hint warn">Model list unavailable. <button class="btn small" data-act="retry-models">Retry</button></p>';
     else if (!app.models.length) h += '<p class="hint">The API returned no decision models.</p>';
