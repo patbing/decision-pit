@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision Pit · AI decision models trade a fake market</title>
+<meta name="description" content="Decision models (Jev, D3, Microsoft-Decision-1, Kev...) trade one seeded fake market via Pollinations /alpha/decisions. Cheer, whisper or shock the market. Free offline mode included.">
+<meta name="color-scheme" content="dark light">
+<link rel="stylesheet" href="css/style.css">
+<script defer src="https://cdn.jsdelivr.net/npm/@pollinations/ui@0.1.0-alpha.31/dist/connect.js"></script>
+</head>
+<body data-view="setup">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>Decision<span>Pit</span></h1>
+    <p>AI decision models trade a fake market</p>
+  </div>
+  <span id="mode-badge" class="badge mode offline">OFFLINE SIMULATION</span>
+  <div class="topright">
+    <span id="spent" class="spent" hidden></span>
+    <polli-connect id="connect" budget="1" expiry="1" models="decision"></polli-connect>
+    <span id="connect-fallback" class="hint" hidden>Sign-in unavailable. Offline mode still works.</span>
+    <a class="made" href="https://pollinations.ai/?ref=badge" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pollinations/pollinations/main/packages/ui/src/brand/badge-made-with.svg" alt="Made with pollinations.ai" height="28"></a>
+  </div>
+</header>
+<p id="reconnect-note" class="strip" hidden>Reconnecting reloads the page; the match will restart from its seed.</p>
+
+<main id="main">
+  <section id="view-setup" aria-label="Match setup">
+    <div class="intro">
+      <h2>Which AI keeps its cool in a market it has never seen?</h2>
+      <ol class="steps">
+        <li><b>Pick players.</b> Real decision models (live) or free rule-based bots (offline).</li>
+        <li><b>Watch one seeded market.</b> Every player sees the same prices and headlines. Confidence sets trade size; a second question scores their forecasts.</li>
+        <li><b>Meddle.</b> Fake rumors, market shocks and whispers show who is fooled. Then rematch the same seed.</li>
+      </ol>
+      <p class="hint">HIVE is a fictional stock and the credits are not money. Nothing here is investment advice.</p>
+    </div>
+    <div id="setup-body"></div>
+  </section>
+
+  <section id="view-match" aria-label="Match" hidden>
+    <div class="match-grid">
+      <div class="match-left">
+        <div id="banner"></div>
+        <div id="headline" class="headline" aria-live="polite"></div>
+        <div class="panel chartpanel">
+          <div id="chart-legend" class="legend"></div>
+          <div class="chartbox">
+            <canvas id="chart" role="img" aria-label="Chart of the HIVE price and each player's equity as percent change from the start"></canvas>
+            <div id="chart-tip" class="tip" hidden></div>
+          </div>
+        </div>
+        <div id="controls" class="controls"></div>
+        <div id="tray" class="panel tray"></div>
+        <details class="panel logbox"><summary>Event log</summary><div id="log"></div></details>
+      </div>
+      <div class="match-right"><div id="cards" class="cardlist"></div></div>
+    </div>
+  </section>
+
+  <section id="view-results" aria-label="Results" hidden>
+    <div id="results-body"></div>
+  </section>
+</main>
+
+<aside id="inspector" class="inspector" aria-label="Request inspector" hidden></aside>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<footer class="foot">
+  <p><b>Uses Pollinations:</b> POST https://gen.pollinations.ai/alpha/decisions (decision models) · GET https://gen.pollinations.ai/v1/models?category=decision (model list) · Sign-in via Pollinations Connect (BYOP).</p>
+  <p>Your key stays in this tab and is never stored by this app. The market, the company and the credits are fictional. Not investment advice. Decision Pit is an independent project and is not affiliated with any model provider.</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/pollinations.js"></script>
+<script src="js/rng.js"></script>
+<script src="js/market.js"></script>
+<script src="js/portfolio.js"></script>
+<script src="js/prompt.js"></script>
+<script src="js/decide.js"></script>
+<script src="js/sim-players.js"></script>
+<script src="js/interventions.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
