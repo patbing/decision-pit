@@ -691,10 +691,10 @@ decision-pit/
 
 ## 14. 미확인 항목 목록
 
-1. **`gen.pollinations.ai` 실시간 응답 전부**: `/v1/models`의 현재 목록, health, 가용성과 `/alpha/decisions` 실제 호출은 이 환경에서 접속할 수 없었습니다. 레지스트리 소스(2026-11-07 main)로만 확인했습니다.
-2. Microsoft-Decision-1, Kev 4B, Decider, d1, Jev가 **한 요청에 질문 2개**와 3옵션 choice를 받는지(D3는 2~255개, 64문항까지 소스로 확인)
+1. ~~`gen.pollinations.ai` 실시간 응답~~ → **2026-11-07 라이브 확인**: `/v1/models`에서 결정 모델 8개(무료 D3, Microsoft-Decision-1, Span-01 Lite / 유료 Jev 1.14, Decider V1.2, GPT-6 Luna Decisions, Liquid D1, Kev 4B). `/alpha/decisions` 응답은 §설계와 같은 형식(`answers.{key}.choice/probabilities/confidence`, `usage.input_tokens/output_tokens`)이었고, 범위 밖 확률은 0건이었습니다. Span-01 Lite는 noul 전용이라 choice 요청에 400을 돌려줍니다(목록 설명의 "only noul"로 비활성화됨). 기록: `replays/featured.json`(30턴, 6모델, 호출 156회, 오류 0, 0.00438 Pollen).
+2. ~~질문 2개와 3옵션 choice~~ → **라이브 확인**: Jev 1.14, Microsoft-Decision-1, GPT-6 Luna Decisions, Decider V1.2, Kev 4B, D3 모두 질문 2개 + 2/3옵션 choice에 200으로 답했습니다. Liquid D1은 미확인.
 3. 질문이 여러 개일 때 입력 토큰을 문항마다 다시 세는지, 그리고 최소 과금 단위가 있는지
-4. 결정 모델별 응답 지연시간
+4. ~~결정 모델별 응답 지연시간~~ → **라이브 확인**: 6모델 모두 중앙값 약 2.5~2.7초, D3만 최대 14.7초 1회.
 5. `<polli-connect>`의 `budget`에 소수나 작은 값(예: 1)을 넣었을 때 서버가 받아들이는지, `expiry="1"` 동작(문서 기본값은 5와 7)
 6. Quest Pollen 전용 사용자의 인증 `/v1/models`에 Microsoft-Decision-1이 실제로 보이는지(레지스트리 `paidOnly:false`로 미루어 본 추론)
 7. 이슈 #18922 원문(이 환경의 허용 목록 밖이라 열지 못함). 대신 사전심사 프롬프트 원문(`review-prompt.txt`)으로 확인했습니다.
